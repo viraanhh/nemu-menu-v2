@@ -78,14 +78,33 @@ const HomePage = () => {
         </div>
         {/* 3 Tempat Makan Baru */}
         <div className="mt-16">
-            <p className="text-lg font-medium">3 tempat makan yang baru buka</p>
-            <div className="flex flex-row mt-10"></div>
-            <FoodCard
+          <p className="text-lg font-medium">3 tempat makan yang baru buka</p>
+          <div className="flex flex-row mt-10"></div>
+          <FoodCard
             restaurantId="1"
             restaurantName="Sate"
             restaurantAddress="Jl. Menuju IPK 4"
             restaurantImage="/assets/images/sate.png"
           />
+        </div>
+      </div>
+      {/* UMKM Banner */}
+      <div className="pt-32 pb-40 px-30">
+        <div className="w-full bg-[#E07416] p-5 rounded-lg">
+          <div className="flex flex-row space-x-10">
+            {/* Image */}
+            <Image
+              src="/assets/images/cfd.png"
+              width={1920}
+              height={1080}
+              className="w-72 h-40 rounded-md"
+              alt="Foto CFD"
+            />
+            <div className="mt-7 flex flex-col text-white">
+                <p className="font-bold text-xl">Car Free Day: UMKM Tembalang</p>
+                <p className="mt-1.5 font-medium">20 April 2025</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

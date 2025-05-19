@@ -14,7 +14,7 @@ const FoodCard = ({
         <div className="flex flex-col">
           <Image
             src={restaurantImage}
-            className="w-full h-36 rounded-md"
+            className="w-full h-36 rounded-md object-cover"
             width={1920}
             height={1080}
             alt="Sate"
