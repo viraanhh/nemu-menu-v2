@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, use } from "react";
 import { Formik } from "formik";
 import { Select } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -11,7 +11,9 @@ import clsx from "clsx";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const TulisUlasanPage = ({ params }) => {
+const TulisUlasanPage = props => {
+  const params = use(props.params);
+
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [menuInputFocused, setMenuInputFocused] = useState(false);
 
@@ -80,7 +82,7 @@ const TulisUlasanPage = ({ params }) => {
                 handleSubmit(e);
               }}
             >
-              <div className="w-full grid grid-cols-5 space-x-5">
+              <div className="w-full grid grid-cols-5 gap-7">
                 <div className="col-span-3">
                   {/* Judul */}
                   <input

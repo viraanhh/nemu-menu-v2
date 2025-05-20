@@ -126,6 +126,23 @@ const RestoranPage = () => {
                       <Rating name="read-only" value={5} readOnly />
                     </div>
                   </div>
+                  {/* Foto Gambar */}
+                  <div className="mt-7 flex flex-row space-x-5">
+                    <Image
+                      src="/assets/images/steak.png"
+                      width={1920}
+                      height={1080}
+                      className="w-24 h-24 object-cover rounded-md"
+                      alt="Gambar Ulasan 1"
+                    />
+                     <Image
+                      src="/assets/images/sate.png"
+                      width={1920}
+                      height={1080}
+                      className="w-24 h-24 object-cover rounded-md"
+                      alt="Gambar Ulasan 2"
+                    />
+                  </div>
                 </div>
               </div>
               {/* Rating Banner */}
