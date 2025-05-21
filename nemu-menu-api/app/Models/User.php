@@ -2,47 +2,72 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
+
+    protected $table = 'USER'; // Oracle table name
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'id',
         'email',
+        'username',
+        'no_telepon',
+        'nama_depan',
+        'nama_belakang',
+        'tanggal_lahir',
+        'bulan_lahir',
+        'tahun_lahir',
+        'jenis_kelamin',
         'password',
+        'is_admin'
     ];
 
     /**
      * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * The attributes that should be cast.
      */
-    protected function casts(): array
+    protected $casts = [
+        'is_admin' => 'boolean',
+    ];
+
+    /**
+     * Get the reviews posted by the user.
+     */
+    public function reviews()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Review::class, 'user_id', 'id');
+    }
+
+    /**
+     * Generate a UUID for new users
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Let Oracle handle UUID generation through trigger
+        });
     }
 }
