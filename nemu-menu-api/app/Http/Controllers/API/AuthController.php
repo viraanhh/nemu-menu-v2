@@ -34,7 +34,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
-            'is_admin' => false,
+            'is_admin' => $request->is_admin,
             'nama_depan' => $request->nama_depan,
             'nama_belakang' => $request->nama_belakang,
             'no_telepon' => $request->no_telepon,
@@ -54,8 +54,9 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // Validate request with login field that can be either email or username
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'login' => 'required|string',
             'password' => 'required|string',
         ]);
 
@@ -63,7 +64,11 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $user = User::where('email', $request->email)->first();
+        // Determine if the login field is an email or username
+        $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        // Find the user by email or username
+        $user = User::where($loginType, $request->login)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([

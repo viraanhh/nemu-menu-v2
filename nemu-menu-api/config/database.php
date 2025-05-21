@@ -43,9 +43,11 @@ return [
             'prefix'         => env('DB_PREFIX', ''),
             'prefix_schema'  => env('DB_SCHEMA_PREFIX', ''),
             'edition'        => env('DB_EDITION', 'ora$base'),
-            'server_version' => env('DB_SERVER_VERSION', '23c'),
-            'load_balance'   => env('DB_LOAD_BALANCE', 'yes'),
+            'server_version' => env('DB_SERVER_VERSION', '12c'),
             'dynamic'        => [],
+            'options'        => [
+                // Add any PDO options you might need
+            ]
         ],
         'sqlite' => [
             'driver' => 'sqlite',

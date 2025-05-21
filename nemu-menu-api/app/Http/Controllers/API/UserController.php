@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Support\Facades\Storage;
 
-class UserController extends Controller
+class UserController extends Authenticatable
 {
+    use HasUuids;
+
+    // Make sure your primary key is properly configured
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     public function show(Request $request)
     {
         return response()->json($request->user());
