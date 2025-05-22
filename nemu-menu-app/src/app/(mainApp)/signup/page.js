@@ -1,12 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import Image from "next/image";
 import { Formik } from "formik";
 import Link from "next/link";
 
+import { useUser } from "@/contexts/UserContext";
+
 const SignupPage = () => {
+  const router = useRouter();
+  const { signup, user } = useUser();
+
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/");
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    if (!!error) toast.error(error);
+  }, [error]);
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
@@ -42,16 +60,30 @@ const SignupPage = () => {
                   errors.email = "Alamat email tidak valid";
                 }
 
+                if (!values.username) errors.username = "Username harus diisi";
+
                 if (!values.password) errors.password = "Password harus diisi";
+                if (values.password !== values.confirmPassword)
+                  errors.confirmPassword = "Password tidak cocok";
 
                 return errors;
               }}
-              onSubmit={(values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting }) => {
                 setFormSubmitted(true);
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
+                setError("");
+
+                try {
+                  const result = await signup(values);
+                  toast.success("Sign up successful! Please log in again");
+                  router.replace("/login");
+                } catch (error) {
+                  console.log("Error when trying to sign up: ", error);
+                  setError(
+                    "Something went wrong when trying to sign up, please try again."
+                  );
+                } finally {
                   setSubmitting(false);
-                }, 400);
+                }
               }}
             >
               {({
@@ -155,7 +187,7 @@ const SignupPage = () => {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Sign Up
+                      {isSubmitting ? "Signing Up..." : "Sign Up"}
                     </button>
                     <div className="mt-7 text-sm text-center">
                       <p className="text-gray-400">Sudah punya akun?</p>

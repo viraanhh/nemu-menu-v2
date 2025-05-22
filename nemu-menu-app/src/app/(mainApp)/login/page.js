@@ -1,12 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import Image from "next/image";
 import { Formik } from "formik";
 import Link from "next/link";
 
+import { useUser } from "@/contexts/UserContext";
+
 const LoginPage = () => {
+  const router = useRouter();
+  const { login, user, fetchUser } = useUser();
+
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/");
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    if (!!error) toast.error(error);
+  }, [error]);
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
@@ -36,12 +54,22 @@ const LoginPage = () => {
 
                 return errors;
               }}
-              onSubmit={(values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting }) => {
                 setFormSubmitted(true);
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
+                setError("");
+
+                try {
+                  const result = await login(values);
+                  // Refetch user
+                  const token = localStorage.getItem("token");
+                  fetchUser(token);
+                  router.replace("/");
+                } catch (error) {
+                  console.log("Error trying to log in:", error);
+                  setError("Something went wrong logging in, please try again");
+                } finally {
                   setSubmitting(false);
-                }, 400);
+                }
               }}
             >
               {({
@@ -76,7 +104,7 @@ const LoginPage = () => {
                     }}
                   >
                     <input
-                      type="email"
+                      type="text"
                       name="email"
                       placeholder="Email atau Username"
                       className={`text-sm outline-none border ${
@@ -87,6 +115,7 @@ const LoginPage = () => {
                       onChange={handleInputChange}
                       onBlur={handleBlur}
                       value={values.email}
+                      spellCheck={false}
                     />
                     <div className="mb-5 text-sm text-red-700">
                       {shouldShowError("email") && errors.email}
@@ -112,7 +141,7 @@ const LoginPage = () => {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Login
+                      {isSubmitting ? "Logging In..." : "Login"}
                     </button>
                     <div className="mt-7 text-sm text-center">
                       <p className="text-gray-400">Belum punya akun?</p>

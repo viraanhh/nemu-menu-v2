@@ -28,6 +28,12 @@ class Review extends Model
         'harga_dibandingkan_rasa',
         'pelayanan',
         'kebersihan',
+        // Supabase image URLs
+        'photo_1_new',
+        'photo_2_new',
+        'photo_3_new',
+        'photo_4_new',
+        'photo_5_new'
     ];
 
     /**

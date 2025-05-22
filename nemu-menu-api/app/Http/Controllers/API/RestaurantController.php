@@ -112,44 +112,19 @@ class RestaurantController extends Controller
             'nomor_telepon' => 'nullable|string',
             'range_harga' => 'nullable|string',
             'restaurant_image' => 'nullable|image|max:2048',
-            'menu_1' => 'nullable|image|max:2048',
-            'menu_2' => 'nullable|image|max:2048',
-            'menu_3' => 'nullable|image|max:2048',
-            'menu_4' => 'nullable|image|max:2048',
-            'menu_5' => 'nullable|image|max:2048',
+            'menu_1_new' => 'nullable|string|url',
+            'menu_2_new' => 'nullable|string|url',
+            'menu_3_new' => 'nullable|string|url',
+            'menu_4_new' => 'nullable|string|url',
+            'menu_5_new' => 'nullable|string|url',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Update basic fields
-        $restaurant->fill($request->only([
-            'nama',
-            'alamat',
-            'hari_buka_awal',
-            'hari_buka_akhir',
-            'jam_buka',
-            'jam_tutup',
-            'nomor_telepon',
-            'range_harga'
-        ]));
-
-        // Handle restaurant image upload
-        if ($request->hasFile('restaurant_image')) {
-            $imageData = file_get_contents($request->file('restaurant_image')->path());
-            $restaurant->restaurant_image = $imageData;
-        }
-
-        // Handle menu images upload
-        for ($i = 1; $i <= 5; $i++) {
-            $field = "menu_{$i}";
-            if ($request->hasFile($field)) {
-                $imageData = file_get_contents($request->file($field)->path());
-                $restaurant->$field = $imageData;
-            }
-        }
-
+        // Update all fields including image URLs
+        $restaurant->fill($request->all());
         $restaurant->save();
 
         return response()->json([

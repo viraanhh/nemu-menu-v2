@@ -49,11 +49,11 @@ class ReviewController extends Controller
             'harga_dibandingkan_rasa' => 'required|integer|min:0|max:5',
             'pelayanan' => 'required|integer|min:0|max:5',
             'kebersihan' => 'required|integer|min:0|max:5',
-            'photo_1' => 'nullable|image|max:2048',
-            'photo_2' => 'nullable|image|max:2048',
-            'photo_3' => 'nullable|image|max:2048',
-            'photo_4' => 'nullable|image|max:2048',
-            'photo_5' => 'nullable|image|max:2048',
+            'photo_1_new' => 'nullable|string|url', // Now accepts URL string
+            'photo_2_new' => 'nullable|string|url',
+            'photo_3_new' => 'nullable|string|url',
+            'photo_4_new' => 'nullable|string|url',
+            'photo_5_new' => 'nullable|string|url',
         ]);
 
         if ($validator->fails()) {
@@ -63,24 +63,9 @@ class ReviewController extends Controller
         $review = new Review();
         $review->restaurant_id = $restaurantId;
         $review->user_id = $request->user()->id;
-        $review->judul = $request->judul;
-        $review->menu = $request->menu;
-        $review->tanggal_pergi = $request->tanggal_pergi;
-        $review->harga_per_orang = $request->harga_per_orang;
-        $review->rasa_makanan = $request->rasa_makanan;
-        $review->suasana = $request->suasana;
-        $review->harga_dibandingkan_rasa = $request->harga_dibandingkan_rasa;
-        $review->pelayanan = $request->pelayanan;
-        $review->kebersihan = $request->kebersihan;
 
-        // Handle photo uploads
-        for ($i = 1; $i <= 5; $i++) {
-            $field = "photo_{$i}";
-            if ($request->hasFile($field)) {
-                $imageData = file_get_contents($request->file($field)->path());
-                $review->$field = $imageData;
-            }
-        }
+        // Fill all fields including photo URLs
+        $review->fill($request->except(['restaurant_id', 'user_id']));
 
         $review->save();
 

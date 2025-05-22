@@ -1,14 +1,77 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import clsx from "clsx";
 import { Formik } from "formik";
 import { Select } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
+import { useUser } from "@/contexts/UserContext";
+import { supabase } from "@/utils/supabase";
+
 const ProfilePage = () => {
+  const { user, loading, updateUser, logout } = useUser();
+
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const fileInputRef = useRef(null);
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUploadProfileImage = async () => {
+    if (!profileImage) return null;
+
+    try {
+      const bucketName = "nemu-menu";
+      const imageFullPath = `/user/${user.id}/${profileImage.name}`;
+
+      const { data, error: uploadProfileImageError } = await supabase.storage
+        .from(bucketName)
+        .upload(imageFullPath, profileImage, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      console.log("Data", data);
+      console.log("Error", uploadProfileImageError);
+
+      if (uploadProfileImageError) throw uploadProfileImageError;
+
+      const { data: profileImageUrl } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(imageFullPath);
+
+      console.log("Profile Image URL:", profileImageUrl);
+
+      if (profileImageUrl?.publicUrl) {
+        return profileImageUrl.publicUrl;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error uploading profile image:", error);
+      throw error;
+    }
+  };
 
   return (
     <div className="w-full min-h-screen py-20 px-32">
@@ -19,14 +82,27 @@ const ProfilePage = () => {
           {/* User Profile */}
           <div className="mt-6 flex flex-row items-center space-x-10">
             <Image
-              src="/assets/images/default-user-profile.png"
+              src={
+                imagePreview ||
+                (user?.user_profile_new
+                  ? user.user_profile_new
+                  : "/assets/images/default-user-profile.png")
+              }
               width={1920}
               height={1080}
               className="w-full h-full rounded-full object-cover max-h-32 max-w-32"
               alt="Profile Image"
             />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleProfileImageChange}
+              accept="image/*"
+              className="hidden"
+            />
             <button
               type="button"
+              onClick={handleUploadClick}
               className="cursor-pointer bg-[#E07416] hover:bg-[#c96711] transition-colors duration-300 text-white text-sm font-medium w-1/4 py-2.5 rounded-md shadow-lg shadow-gray-300"
             >
               Upload Foto
@@ -34,32 +110,62 @@ const ProfilePage = () => {
           </div>
           {/* Form */}
           <Formik
+            enableReinitialize
             initialValues={{
-              email: "",
-              phone: "",
-              firstName: "",
-              lastName: "",
-              date: "1",
-              month: "1",
-              year: "2025",
-              gender: "",
+              email: user?.email || "",
+              phone: user?.no_telepon || "",
+              firstName: user?.nama_depan || "",
+              lastName: user?.nama_belakang || "",
+              date: user?.tanggal_lahir || "",
+              month: user?.bulan_lahir || "",
+              year: user?.tahun_lahir || "",
+              gender: user?.jenis_kelamin || "",
             }}
             validate={(values) => {
               const errors = {};
 
-              if (!values.email)
-                errors.email = "Username atau email harus diisi";
-
-              if (!values.password) errors.password = "Password harus diisi";
+              if (!values.email) errors.email = "Email harus diisi";
 
               return errors;
             }}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting }) => {
               setFormSubmitted(true);
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-              }, 400);
+
+              try {
+                const updateData = {
+                  email: values.email,
+                  nama_depan: values.firstName,
+                  nama_belakang: values.lastName,
+                  no_telepon: values.phone,
+                  tanggal_lahir: values.date,
+                  bulan_lahir: values.month,
+                  tahun_lahir: values.year,
+                  jenis_kelamin: values.gender,
+                };
+
+                // Upload profile image first if there's one
+                if (profileImage) {
+                  const profileImageUrl = await handleUploadProfileImage();
+                  if (profileImageUrl) {
+                    updateData.user_profile_new = profileImageUrl;
+                  }
+                }
+
+                console.log("updateData", updateData);
+
+                // Now update the user with the complete data
+                const result = await updateUser(updateData);
+                toast.success("Profil berhasil diperbarui!");
+
+                // Clear the profile image state after successful update
+                setProfileImage(null);
+                setImagePreview(null);
+              } catch (error) {
+                console.log("Error updating profile:", error);
+                toast.error("Terjadi kesalahan saat memperbarui profil");
+              }
+
+              setSubmitting(false);
             }}
           >
             {({
@@ -213,7 +319,7 @@ const ProfilePage = () => {
                         {shouldShowError("month") && errors.month}
                       </div>
                     </div>
-                    {/* Bulan */}
+                    {/* Tahun */}
                     <div className="w-full flex flex-col">
                       <input
                         type="text"
@@ -269,7 +375,7 @@ const ProfilePage = () => {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Update Profil
+                      {isSubmitting ? "Memperbarui..." : "Update Profil"}
                     </button>
                     <button
                       className="bg-white hover:bg-gray-100 text-[#676363] font-medium py-2.5 rounded-lg cursor-pointer transition-colors w-1/4 shadow-gray-300 shadow-lg"
@@ -286,9 +392,18 @@ const ProfilePage = () => {
         </div>
         {/* Pengaturan Akun */}
         <div className="w-full col-span-2">
-            <h3 className="text-lg text-[#52575E] font-bold">Pengaturan Akun</h3>
-            <button className="mt-3 text-sm text-[#52575E] hover:text-gray-800 hover:font-medium w-full md:w-80 border border-gray-500 hover:border-gray-800 bg-white hover:bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 text-start py-2.5 px-5">Manajemen Restoran</button>
-            <button className="mt-3 text-sm text-red-700 font-medium w-full md:w-80 border border-red-700 bg-white hover:bg-red-700 hover:text-white rounded-lg cursor-pointer transition-colors duration-300 text-start py-2.5 px-5">Log Out</button>
+          <h3 className="text-lg text-[#52575E] font-bold">Pengaturan Akun</h3>
+          {user?.is_admin && (
+            <button className="mt-3 text-sm text-[#52575E] hover:text-gray-800 hover:font-medium w-full md:w-80 border border-gray-500 hover:border-gray-800 bg-white hover:bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 text-start py-2.5 px-5">
+              Manajemen Restoran
+            </button>
+          )}
+          <button
+            className="mt-3 text-sm text-red-700 font-medium w-full md:w-80 border border-red-700 bg-white hover:bg-red-700 hover:text-white rounded-lg cursor-pointer transition-colors duration-300 text-start py-2.5 px-5"
+            onClick={logout}
+          >
+            Log Out
+          </button>
         </div>
       </div>
     </div>

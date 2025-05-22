@@ -34,7 +34,8 @@ class User extends Authenticatable
         'tahun_lahir',
         'jenis_kelamin',
         'password',
-        'is_admin'
+        'is_admin',
+        'user_profile_new' // Supabase image URL
     ];
 
     /**

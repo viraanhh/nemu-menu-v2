@@ -25,6 +25,8 @@ class Restaurant extends Model
         'jam_tutup',
         'nomor_telepon',
         'range_harga',
+        // Supabase image URLs
+        'restaurant_image_new',
     ];
 
     /**
