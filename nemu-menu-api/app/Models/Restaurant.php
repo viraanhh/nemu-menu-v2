@@ -27,6 +27,11 @@ class Restaurant extends Model
         'range_harga',
         // Supabase image URLs
         'restaurant_image_new',
+        'menu_1_new',
+        'menu_2_new',
+        'menu_3_new',
+        'menu_4_new',
+        'menu_5_new',
     ];
 
     /**

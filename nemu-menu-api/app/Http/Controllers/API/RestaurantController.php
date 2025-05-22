@@ -32,12 +32,12 @@ class RestaurantController extends Controller
             'jam_tutup' => 'required|string',
             'nomor_telepon' => 'required|string',
             'range_harga' => 'required|string',
-            'restaurant_image' => 'required|image|max:2048',
-            'menu_1' => 'nullable|image|max:2048',
-            'menu_2' => 'nullable|image|max:2048',
-            'menu_3' => 'nullable|image|max:2048',
-            'menu_4' => 'nullable|image|max:2048',
-            'menu_5' => 'nullable|image|max:2048',
+            'restaurant_image_new' => 'nullable|string|url',
+            'menu_1_new' => 'nullable|string|url',
+            'menu_2_new' => 'nullable|string|url',
+            'menu_3_new' => 'nullable|string|url',
+            'menu_4_new' => 'nullable|string|url',
+            'menu_5_new' => 'nullable|string|url',
         ]);
 
         if ($validator->fails()) {
@@ -45,29 +45,7 @@ class RestaurantController extends Controller
         }
 
         $restaurant = new Restaurant();
-        $restaurant->nama = $request->nama;
-        $restaurant->alamat = $request->alamat;
-        $restaurant->hari_buka_awal = $request->hari_buka_awal;
-        $restaurant->hari_buka_akhir = $request->hari_buka_akhir;
-        $restaurant->jam_buka = $request->jam_buka;
-        $restaurant->jam_tutup = $request->jam_tutup;
-        $restaurant->nomor_telepon = $request->nomor_telepon;
-        $restaurant->range_harga = $request->range_harga;
-
-        // Handle restaurant image upload
-        if ($request->hasFile('restaurant_image')) {
-            $imageData = file_get_contents($request->file('restaurant_image')->path());
-            $restaurant->restaurant_image = $imageData;
-        }
-
-        // Handle menu images upload
-        for ($i = 1; $i <= 5; $i++) {
-            $field = "menu_{$i}";
-            if ($request->hasFile($field)) {
-                $imageData = file_get_contents($request->file($field)->path());
-                $restaurant->$field = $imageData;
-            }
-        }
+        $restaurant->fill($request->all()); // Fill all fields including image URLs
 
         $restaurant->save();
 
@@ -111,7 +89,7 @@ class RestaurantController extends Controller
             'jam_tutup' => 'nullable|string',
             'nomor_telepon' => 'nullable|string',
             'range_harga' => 'nullable|string',
-            'restaurant_image' => 'nullable|image|max:2048',
+            'restaurant_image_new' => 'nullable|string|url',
             'menu_1_new' => 'nullable|string|url',
             'menu_2_new' => 'nullable|string|url',
             'menu_3_new' => 'nullable|string|url',

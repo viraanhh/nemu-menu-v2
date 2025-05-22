@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\ImageController;
 use App\Http\Controllers\API\RestaurantController;
 use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\UserController;
@@ -16,12 +15,6 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::post('/auth/signup', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
-
-// Image routes
-Route::get('/users/{userId}/profile-image', [ImageController::class, 'getUserProfile']);
-Route::get('/restaurants/{restaurantId}/image', [ImageController::class, 'getRestaurantImage']);
-Route::get('/restaurants/{restaurantId}/menu/{menuNumber}', [ImageController::class, 'getRestaurantMenu']);
-Route::get('/reviews/{reviewId}/photos/{photoNumber}', [ImageController::class, 'getReviewPhoto']);
 
 // Restaurant public routes
 Route::get('/restaurants', [RestaurantController::class, 'index']);

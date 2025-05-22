@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import clsx from "clsx";
@@ -12,6 +13,8 @@ import { useUser } from "@/contexts/UserContext";
 import { supabase } from "@/utils/supabase";
 
 const ProfilePage = () => {
+  const router = useRouter();
+
   const { user, loading, updateUser, logout } = useUser();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -394,7 +397,10 @@ const ProfilePage = () => {
         <div className="w-full col-span-2">
           <h3 className="text-lg text-[#52575E] font-bold">Pengaturan Akun</h3>
           {user?.is_admin && (
-            <button className="mt-3 text-sm text-[#52575E] hover:text-gray-800 hover:font-medium w-full md:w-80 border border-gray-500 hover:border-gray-800 bg-white hover:bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 text-start py-2.5 px-5">
+            <button
+              className="mt-3 text-sm text-[#52575E] hover:text-gray-800 hover:font-medium w-full md:w-80 border border-gray-500 hover:border-gray-800 bg-white hover:bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 text-start py-2.5 px-5"
+              onClick={() => router.push("/profile/admin/dashboard")}
+            >
               Manajemen Restoran
             </button>
           )}
