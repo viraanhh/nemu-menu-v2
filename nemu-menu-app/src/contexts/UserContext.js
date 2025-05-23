@@ -43,7 +43,7 @@ export function UserProvider({ children }) {
   const updateUser = async (userData) => {
     try {
       const token = localStorage.getItem("token");
-      
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/user`,
         {
@@ -58,7 +58,7 @@ export function UserProvider({ children }) {
 
       const data = await response.json();
       console.log("Response from update:", data);
-      
+
       if (data.user) {
         setUser(data.user);
       }
@@ -94,6 +94,9 @@ export function UserProvider({ children }) {
 
       const data = await response.json();
 
+      if (data.message === "Invalid credentials")
+        throw Error("Invalid credentials");
+
       localStorage.setItem("token", data.access_token);
       setUser(data.user);
       router.push("/");
@@ -122,11 +125,31 @@ export function UserProvider({ children }) {
 
       const data = await response.json();
 
+      if (data.errors) {
+        const errors = [];
+
+        if (data.errors.email && data.errors.email.length > 0)
+          errors.push(data.errors.email[0]);
+        if (data.errors.password && data.errors.password.length > 0)
+          errors.push(data.errors.password[0]);
+
+        const errorMessage = errors.join(" and ");
+
+        throw Error(errorMessage);
+      }
+
       return { success: true };
     } catch (error) {
+      let errorMessage;
+      if (typeof error.message === "string") {
+        errorMessage = error.message;
+      } else {
+        errorMessage = "Something went wrong when trying to sign up.";
+      }
+
       return {
         success: false,
-        error: "An error occurred during signup",
+        error: errorMessage,
       };
     }
   };

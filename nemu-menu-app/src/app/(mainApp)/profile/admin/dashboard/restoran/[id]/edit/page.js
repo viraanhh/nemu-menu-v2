@@ -32,6 +32,7 @@ const EditRestaurantPage = () => {
     if (restaurantId) {
       fetchRestaurant();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restaurantId]);
 
   const fetchRestaurant = async () => {
@@ -269,6 +270,9 @@ const EditRestaurantPage = () => {
                     <p className="mt-4 text-gray-800 text-sm">
                       Upload Menu Restoran Disini
                     </p>
+                    <p className="mt-2 text-gray-600 text-xs text-center">
+                      Maksimal 5 gambar menu
+                    </p>
                   </div>
                 </div>
                 <input
@@ -398,7 +402,7 @@ const EditRestaurantPage = () => {
                 const token = localStorage.getItem("token");
 
                 if (!token) {
-                  alert("Authentication required. Please login again.");
+                  toast.error("Authentication required. Please login again.");
                   router.push("/login");
                   return;
                 }

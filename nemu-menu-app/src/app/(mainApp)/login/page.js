@@ -60,10 +60,8 @@ const LoginPage = () => {
 
                 try {
                   const result = await login(values);
-                  // Refetch user
-                  const token = localStorage.getItem("token");
-                  fetchUser(token);
-                  router.replace("/");
+
+                  if (!result.success) throw Error(result.error);
                 } catch (error) {
                   console.log("Error trying to log in:", error);
                   setError("Something went wrong logging in, please try again");

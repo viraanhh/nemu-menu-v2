@@ -10,7 +10,7 @@ const Header = () => {
   const { user } = useUser();
   return (
     <header className="w-full bg-[#E07416] py-7 px-16 sticky top-0 z-30">
-      <div className="w-full flex justify-between">
+      <div className="w-full flex justify-between items-center">
         <Link href="/">
           <Image
             src="/assets/images/nemumenu.png"
@@ -19,7 +19,7 @@ const Header = () => {
             height={66}
           />
         </Link>
-        {!!user && (
+        {!!user ? (
           <Link href="/profile">
             <Image
               src={
@@ -32,6 +32,10 @@ const Header = () => {
               height={1080}
               className="rounded-full w-10 h-10"
             />
+          </Link>
+        ) : (
+          <Link href="/login" className="text-white font-bold">
+            Login
           </Link>
         )}
       </div>

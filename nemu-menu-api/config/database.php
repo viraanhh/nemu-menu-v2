@@ -45,6 +45,11 @@ return [
             'edition'        => env('DB_EDITION', 'ora$base'),
             'server_version' => env('DB_SERVER_VERSION', '12c'),
             'dynamic'        => [],
+            'driver_options' => [
+                // Force parameter binding
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_STRINGIFY_FETCHES => false,
+            ],
             'options'        => [
                 // Add any PDO options you might need
             ]

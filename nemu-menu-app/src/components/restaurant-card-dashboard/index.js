@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { PiImageDuotone } from "react-icons/pi";
 import { HiPencil } from "react-icons/hi2";
 import { FaTrash } from "react-icons/fa6";
 
@@ -37,7 +39,7 @@ const RestaurantCardDashboard = ({
       const token = localStorage.getItem("token");
 
       if (!token) {
-        alert("Authentication required. Please login again.");
+        toast.error("Authentication required. Please login again.");
         router.push("/login");
         return;
       }
@@ -68,29 +70,29 @@ const RestaurantCardDashboard = ({
       }
 
       // Show success message
-      alert("Restaurant deleted successfully!");
+      toast.success("Restaurant deleted successfully!");
     } catch (error) {
       console.error("Error deleting restaurant:", error);
 
       if (
         error.message.includes("Cannot delete restaurant with existing reviews")
       ) {
-        alert(
+        toast.error(
           "Cannot delete this restaurant because it has existing reviews. Please remove all reviews first."
         );
       } else if (
         error.message.includes("401") ||
         error.message.includes("Unauthorized")
       ) {
-        alert("Authentication failed. Please login again.");
+        toast.error("Authentication failed. Please login again.");
         router.push("/login");
       } else if (
         error.message.includes("403") ||
         error.message.includes("Forbidden")
       ) {
-        alert("You don't have permission to delete restaurants.");
+        toast.error("You don't have permission to delete restaurants.");
       } else {
-        alert("Failed to delete restaurant. Please try again.");
+        toast.error("Failed to delete restaurant. Please try again.");
       }
     } finally {
       setIsDeleting(false);
@@ -109,16 +111,20 @@ const RestaurantCardDashboard = ({
       <Link href={`/profile/admin/dashboard/restoran/${restaurantId}/edit`}>
         <div className="bg-white w-[48.5rem] rounded-lg hover:shadow-lg transition-shadow duration-300">
           <div className="flex flex-row space-x-5">
-            <Image
-              src={restaurantImage}
-              width={1920}
-              height={1080}
-              alt="Restaurant thumbnail"
-              className="w-[23rem] h-52 rounded-md object-cover"
-              onError={(e) => {
-                e.target.src = "/assets/images/default-restaurant.png";
-              }}
-            />
+            {!!restaurantImage ? (
+              <Image
+                src={restaurantImage}
+                width={1920}
+                height={1080}
+                alt="Restaurant thumbnail"
+                className="w-80 h-52 rounded-md object-cover"
+                onError={(e) => {
+                  e.target.src = "/assets/images/default-restaurant.png";
+                }}
+              />
+            ) : (
+              <PiImageDuotone className="w-80 h-52 rounded-md text-[#E07416]" />
+            )}
             <div className="w-full relative py-4">
               <h3 className="text-2xl text-[#E07416] font-bold">
                 {restaurantName}

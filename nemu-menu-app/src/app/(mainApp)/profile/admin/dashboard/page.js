@@ -165,10 +165,7 @@ const AdminRestaurantsPage = () => {
               key={restaurant.id}
               restaurantId={restaurant.id}
               restaurantAddress={restaurant.alamat}
-              restaurantImage={
-                restaurant.restaurant_image_new ||
-                "/assets/images/default-restaurant.png"
-              }
+              restaurantImage={restaurant.restaurant_image_new}
               restaurantName={restaurant.nama}
               onDelete={handleDeleteRestaurant}
               restaurant={restaurant}

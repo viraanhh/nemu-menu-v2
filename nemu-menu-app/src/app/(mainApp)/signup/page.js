@@ -73,14 +73,21 @@ const SignupPage = () => {
                 setError("");
 
                 try {
-                  const result = await signup(values);
+                  const signUpData = {
+                    email: values.email,
+                    is_admin: false,
+                    username: values.username,
+                    password: values.password,
+                  };
+                  const result = await signup(signUpData);
+
+                  if (!result.success) throw Error(result.error);
+
                   toast.success("Sign up successful! Please log in again");
                   router.replace("/login");
                 } catch (error) {
-                  console.log("Error when trying to sign up: ", error);
-                  setError(
-                    "Something went wrong when trying to sign up, please try again."
-                  );
+                  console.log("Error when trying to sign up: ", error.message);
+                  setError(error.message);
                 } finally {
                   setSubmitting(false);
                 }
