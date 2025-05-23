@@ -1,7 +1,7 @@
 # nemu-menu-v2
 ## Tech Stack Overview
 * Laravel 12.x as Backend
-* React.js framework' Next.js 15.x for Frontend
+* React.js' framework Next.js 15.x for Frontend
 * Supabase storage to save the image files
 
 ## Setup Tutorial
