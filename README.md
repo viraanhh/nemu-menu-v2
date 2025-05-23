@@ -1,7 +1,12 @@
 # nemu-menu-v2
-Here is a detailed guide to set up this project.
+## Tech Stack Overview
+* Laravel 12.x as Backend
+* React.js framework' Next.js 15.x for Frontend
+* Supabase storage to save the image files
 
 ## Setup Tutorial
+Here is a detailed guide to set up this project.
+
 ### 1. Git Clone
 As always, git clone this project to your local working directory.
 ```
