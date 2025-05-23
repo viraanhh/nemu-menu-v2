@@ -1,14 +1,24 @@
 # nemu-menu-v2
-Here is a detailed guide to set up this project.
+## Tech Stack Overview
+* Laravel 12.x as Backend
+* React.js' framework Next.js 15.x for Frontend
+* Supabase storage to save the image files
+
+## IMPORTANT: Prerequisites
+* PHP (XAMPP), Laravel, and Composer Installed
+* Node.js and npm Installed
+* Oracle Database 23ai Installed
+* Oracle SQL Developer Installed
 
 ## Setup Tutorial
+Here is a detailed guide to set up this project.
+
 ### 1. Git Clone
 As always, git clone this project to your local working directory.
 ```
-https://github.com/viraanhh/nemu-menu-v2.git
+git clone https://github.com/viraanhh/nemu-menu-v2.git
 ```
 ### 2. Setup the Backend
-#### 1. Installation
 Change directory to nemu-menu api with this command:
 
 ```
@@ -124,7 +134,7 @@ Moving on, don't forget to set up your Oracle DB. It's pretty complicated so fol
 * Reference for handling this instaclient installation in above steps are here (https://stackoverflow.com/questions/68162636/php-warning-php-startup-unable-to-load-dynamic-library-oci8-12c)
 * Continuing on, extract this **php_oci8-3.4.0-8.2-ts-vs16-x64.zip** file wherever. Then, copy this file (**php_oci8_19.dll**) to this folder: **C:\xampp\php\ext**
 * Finally, you want to check your php.ini file located in this path: **C:\xampp\php\php.ini**, and make sure that you have activated this extension: "extension=oci8_19"
-* Last step for this PHP configuration, just in case, restart your Apache client with XAMPP just by stopping it then starting it again
+* Last step for this PHP configuration, just in case, restart your Apache server with XAMPP just by stopping it then starting it again
 
 Then, install both PHP and Node dependencies with:
 ```
@@ -137,6 +147,15 @@ But if you somehow got an error because you don't have node or npm installed, fo
 Perfect, finally run the API server with:
 ```
 nemu-menu-v2\nemu-menu-api> php artisan serve
+```
+
+The backend API server will run successfully if you don't run into any issues and it returns something like this:
+```
+nemu-menu-v2\nemu-menu-api> php artisan serve
+
+   INFO  Server running on [http://127.0.0.1:8000].  
+
+  Press Ctrl+C to stop the server
 ```
 
 ### 3. Setup the Frontend
