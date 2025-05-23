@@ -208,7 +208,7 @@ const HomePage = () => {
                 </p>
               </div>
             ) : (
-              <div className="flex flex-row space-x-10 space-y-4">
+              <div className="flex flex-row space-x-10 space-y-7 flex-wrap">
                 {filteredRestaurants.map((restaurant) => (
                   <FoodCard
                     key={restaurant.id}
@@ -229,7 +229,7 @@ const HomePage = () => {
                 3 tempat makan yang baru buka
               </p>
               <div className="mt-10 space-y-6">
-                <div className="flex flex-row space-x-10 space-y-4">
+                <div className="flex flex-row space-x-10 space-y-7 flex-wrap">
                   {getLatestRestaurants().map((restaurant) => (
                     <FoodCard
                       key={`latest-${restaurant.id}`}

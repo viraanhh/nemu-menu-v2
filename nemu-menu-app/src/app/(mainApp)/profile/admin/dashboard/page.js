@@ -133,7 +133,7 @@ const AdminRestaurantsPage = () => {
           </h1>
           <button
             onClick={handleRefresh}
-            className="text-[#E07416] hover:text-[#c96711] text-sm underline transition-colors duration-300"
+            className="cursor-pointer text-[#E07416] hover:text-[#c96711] text-sm underline transition-colors duration-300"
             title="Refresh restaurants list"
           >
             Refresh
