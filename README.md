@@ -134,7 +134,7 @@ Moving on, don't forget to set up your Oracle DB. It's pretty complicated so fol
 * Reference for handling this instaclient installation in above steps are here (https://stackoverflow.com/questions/68162636/php-warning-php-startup-unable-to-load-dynamic-library-oci8-12c)
 * Continuing on, extract this **php_oci8-3.4.0-8.2-ts-vs16-x64.zip** file wherever. Then, copy this file (**php_oci8_19.dll**) to this folder: **C:\xampp\php\ext**
 * Finally, you want to check your php.ini file located in this path: **C:\xampp\php\php.ini**, and make sure that you have activated this extension: "extension=oci8_19"
-* Last step for this PHP configuration, just in case, restart your Apache client with XAMPP just by stopping it then starting it again
+* Last step for this PHP configuration, just in case, restart your Apache server with XAMPP just by stopping it then starting it again
 
 Then, install both PHP and Node dependencies with:
 ```
