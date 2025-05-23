@@ -4,6 +4,12 @@
 * React.js' framework Next.js 15.x for Frontend
 * Supabase storage to save the image files
 
+## IMPORTANT: Prerequisites
+* PHP (XAMPP), Laravel, and Composer Installed
+* Node.js and npm Installed
+* Oracle Database 23ai Installed
+* Oracle SQL Developer Installed
+
 ## Setup Tutorial
 Here is a detailed guide to set up this project.
 
