@@ -8,7 +8,6 @@ As always, git clone this project to your local working directory.
 https://github.com/viraanhh/nemu-menu-v2.git
 ```
 ### 2. Setup the Backend
-#### 1. Installation
 Change directory to nemu-menu api with this command:
 
 ```
