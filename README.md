@@ -138,6 +138,15 @@ Perfect, finally run the API server with:
 nemu-menu-v2\nemu-menu-api> php artisan serve
 ```
 
+The backend API server will run successfully if you don't run into any issues and it returns something like this:
+```
+nemu-menu-v2\nemu-menu-api> php artisan serve
+
+   INFO  Server running on [http://127.0.0.1:8000].  
+
+  Press Ctrl+C to stop the server
+```
+
 ### 3. Setup the Frontend
 Create a new window for your terminal, navigate to your project.
 
