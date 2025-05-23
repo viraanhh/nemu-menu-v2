@@ -5,7 +5,7 @@ Here is a detailed guide to set up this project.
 ### 1. Git Clone
 As always, git clone this project to your local working directory.
 ```
-https://github.com/viraanhh/nemu-menu-v2.git
+git clone https://github.com/viraanhh/nemu-menu-v2.git
 ```
 ### 2. Setup the Backend
 Change directory to nemu-menu api with this command:
